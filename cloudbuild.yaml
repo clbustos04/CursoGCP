@@ -1,0 +1,18 @@
+steps:
+  # build the JAR with gradle
+- name: gradle:jdk8
+  entrypoint: gradle
+  args: ['build']
+  # build the container image
+- name: "gcr.io/cloud-builders/docker"
+  args: ["build", "-t", "us.gcr.io/clouddojo02-int-001040-00512/cbustosg-usuarios-service:latest", "."]
+  # push container image
+- name: "gcr.io/cloud-builders/docker"
+  args: ["push", "us.gcr.io/clouddojo02-int-001040-00512/cbustosg-usuarios-service:latest"]
+  # deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
+  args:
+  - run
+  - --filename=./deploy/gke/deployment.yaml
+  - --location=us-central1-c
+  - --cluster=my-cluster

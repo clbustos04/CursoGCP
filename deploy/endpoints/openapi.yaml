@@ -1,0 +1,149 @@
+swagger: "2.0"
+info:
+  description: "OpenAPI definition for cbustosg-usuarios-service microservice"
+  version: "1"
+  title: "cbustosg-usuarios-service-api-rest"
+host: "cbustosg-usuarios-service-api-rest.endpoints.clouddojo02-int-001040-00512.cloud.goog"
+x-google-endpoints:
+  - name: "cbustosg-usuarios-service-api-rest.endpoints.clouddojo02-int-001040-00512.cloud.goog"
+    allow_cors: true
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+schemes:
+  - "https"
+tags:
+  - name: vehicle-models-controller
+    description: Vehicle Models Controller
+paths:
+  '/api/v1/models':
+    post:
+      tags:
+        - vehicle-models-controller
+      summary: createVehicleModel
+      operationId: createVehicleModelUsingPOST
+      parameters:
+        - name: vehicleModel
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/VehicleModelDto'
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/VehicleModelDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+      security:
+        - sa_api_vehicles: []
+    put:
+      tags:
+        - vehicle-models-controller
+      summary: updateVehicleModel
+      operationId: updateVehicleModelUsingPUT
+      parameters:
+        - name: vehicleModel
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/VehicleModelDto'
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/VehicleModelDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+      security:
+        - sa_api_vehicles: []
+  '/api/v1/models/{id}':
+    get:
+      tags:
+        - vehicle-models-controller
+      summary: findVehicleModelById
+      operationId: findVehicleModelByIdUsingGET
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: number
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/VehicleModelDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+      security:
+        - sa_api_vehicles: []
+    delete:
+      tags:
+        - vehicle-models-controller
+      summary: deleteVehicleModelById
+      operationId: deleteVehicleModelByIdUsingDELETE
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+      security:
+        - sa_api_vehicles: []
+definitions:
+  VehicleModelDto:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      brand:
+        type: string
+      year:
+        type: integer
+      version:
+        type: string
+      madeIn:
+        type: string
+securityDefinitions:
+  sa_api_vehicles:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "sa-api-vehicles@clouddojo02-int-001040-00512.iam.gserviceaccount.com"
+    x-google-jwks_uri: "https://www.googleapis.com/robot/v1/metadata/x509/sa-api-vehicles@clouddojo02-int-001040-00512.iam.gserviceaccount.com"        

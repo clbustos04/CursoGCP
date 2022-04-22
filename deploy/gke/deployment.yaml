@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cbustosg-usuarios-service
+spec:
+  selector:
+    matchLabels:
+      app: cbustosg-usuarios-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cbustosg-usuarios-service
+    spec:
+      containers:
+      - name: cbustosg-usuarios-service
+        resources:
+          limits:
+            cpu: 300m
+            memory: 350Mi
+          requests:
+            cpu: 200m
+            memory: 300Mi
+        image: us.gcr.io/clouddojo02-int-001040-00512/cbustosg-usuarios-service:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        env:
+        - name: ENVIRONMENT
+          value: "dev"
+        livenessProbe:
+          httpGet:
+            path: /api/actuator/health/liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/actuator/health/readiness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 30
+      - name: esp
+        image: gcr.io/endpoints-release/endpoints-runtime:2
+        args: [
+          "--listener_port=8081",
+          "--backend=127.0.0.1:8080",
+          "--service=cbustosg-usuarios-service-api-rest.endpoints.clouddojo02-int-001040-00512.cloud.goog",
+          "--rollout_strategy=managed",
+          "-z", "healthz",
+        ]
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+        ports:
+          - containerPort: 8081        
